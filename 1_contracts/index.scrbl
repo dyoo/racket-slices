@@ -2,7 +2,7 @@
 
 @(require (for-label racket/base))
 
-@title{Racket Serve 1: use contracts to check inputs and outputs}
+@title{Racket Serves #1: use contracts to check inputs and outputs}
 @author+email["Danny Yoo" "dyoo@cs.wpi.edu"]
 
 This will be part of a series that talks about using
@@ -32,4 +32,17 @@ process along the way!)}
 
 @section{The problem}
 
+Beginning Racket programmers learn to write functions, but one issue
+that comes up occassionally is getting the types wrong.
+
+(add small-but-interesting example here)
+
+
+@section{Contracts in action}
+(show contract system in action)
+
+
+
 @section{The solution}
+(show what errors will look like in the system)
+
