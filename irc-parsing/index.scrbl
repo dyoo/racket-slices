@@ -15,6 +15,11 @@
 @title{A Racket Slice: munging IRC chat logs}
 @author+email["Danny Yoo" "dyoo@hashcollision.org"]
 
+@centered{@smaller{Source code can be found at:
+@url{https://github.com/dyoo/racket-slices}.  The latest version of this
+document lives in @url{http://hashcollision.org/racket-slices/irc-parsing}.}}
+
+
 
 
 Let's say that we have some source of text, such as IRC chat logs, and we'd
