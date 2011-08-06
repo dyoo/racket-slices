@@ -172,6 +172,8 @@ is a slightly verbose, error-prone way to destructure the list
 that we're getting back from
 @racket[regexp-match].  Can we do better?
 
+@margin-note{See the documentation of @racketmodname[racket/match] for more
+information on the pattern-matching library.}
 We can, with the structure-matching library @racket[match],
 which lets us express the code more nicely.  Let's try this again...
 @interaction[#:eval my-evaluator
