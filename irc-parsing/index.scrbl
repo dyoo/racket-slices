@@ -35,13 +35,14 @@ document lives in @url{http://hashcollision.org/racket-slices/irc-parsing}.}}
 
 
 
+@section{The Problem}
 
 Let's say that we have some source of text, such as IRC chat logs, and we'd
 like to extract information from them.
 To use the precise technical term, we'd like to 
 @link["http://www.catb.org/jargon/html/M/munge.html"]{munge}.
 
-
+@section{Exploration}
 @margin-note{The following is an interactive session between
              us and the Racket @link["http://docs.racket-lang.org/guide/intro.html#(part._.Interacting_with_.Racket)"]{REPL}, using the full-fledged @racketmodname[racket] language.}
 Can we take a slice at this problem using the @link["http://racket-lang.org"]{Racket}
@@ -176,23 +177,17 @@ that we're getting back from
 information on the pattern-matching library.}
 We can, with the structure-matching library @racket[match],
 which lets us express the code more nicely.  Let's try this again...
+@; Thanks to Sam Tobin-Hoshstadt for the improved code here!
+@; See: http://lists.racket-lang.org/users/archive/2011-August/047180.html
 @interaction[#:eval my-evaluator
                     (define (parse-irc a-line)
-                      (define (on-action-line a-match)
-                        (match a-match
-                          [(list whole-match hour minute type msg)
-                           (action hour minute type msg)]))
-                      
-                      (define (on-chat-line a-match)
-                        (match a-match
-                          [(list whole-match hour minute who msg)
-                           (chat hour minute who msg)]))
-                      
-                      (cond
-                        [(regexp-match action-regexp a-line)
-                         => on-action-line]
-                        [(regexp-match chat-regexp a-line)
-                         => on-chat-line]
+                      (match a-line
+                        [(regexp action-regexp 
+                                 (list _ hour minute type msg))
+                         (action hour minute type msg)]
+                        [(regexp chat-regexp 
+                                 (list _ hour minute who msg))
+                         (chat hour minute who msg)]
                         [else
                          (error 'oops-i-did-it-again)]))]
 @interaction[#:eval my-evaluator
@@ -256,21 +251,13 @@ Finally, let's go back and package what we've learned into a module
 
 ;; parse-irc: string -> (U action chat)
 (define (parse-irc a-line)
-  (define (on-action-line a-match)
-    (match a-match
-      [(list whole-match hour minute type msg)
-       (action hour minute type msg)]))
-  
-  (define (on-chat-line a-match)
-    (match a-match
-      [(list whole-match hour minute who msg)
-       (chat hour minute who msg)]))
-  
-  (cond
-    [(regexp-match action-regexp a-line)
-     => on-action-line]
-    [(regexp-match chat-regexp a-line)
-     => on-chat-line]
+  (match a-line
+    [(regexp action-regexp 
+             (list _ hour minute type msg))
+     (action hour minute type msg)]
+    [(regexp chat-regexp 
+             (list _ hour minute who msg))
+     (chat hour minute who msg)]
     [else
      (error 'oops-i-did-it-again)]))
 
@@ -294,3 +281,7 @@ parsed-irc
               (chat "01" "42" "dyoo" "... And that's a wrap!  See you around!"))
     }|
   }
+
+
+@section{Acknowledgements}
+Thanks to Sam Tobin-Hochstadt for the improved version of @racket[parse-irc]!
